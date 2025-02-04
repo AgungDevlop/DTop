@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 // Contoh data array/JSON yang berisi ID dan URL iklan
 const adLinks = [
-  { id: "b5Hsb8Hd", url: "https://meowadvertising.com/uyn55j734?key=6215083a0cad61022fb25eeca740099d", name: "Adsterra" },
+  { id: "b5Hsb8Hd", url: "https://bmmads.com/get/?spot_id=2006837&cat=25&subid=808526990", name: "MyBid" },
   { id: "Gs86shHs", url: "https://lovingassociate.com/bG3SVz0xP.3/pfvobLmSVjJ/ZjDf0Q0tOODvQsziOlDkMI3ILHT/QQ4dN/DZMF4YMizmg-", name: "HillTop" },
   { id: "G6shSh7H", url: "https://so-gr3at3.com/go/1239096", name: "Roller" },
   { id: "Hsh4hI8s", url: "https://behoneyono.com/ilcDrCNYWkby/94691", name: "Galaxion" },
