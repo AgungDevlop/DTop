@@ -156,25 +156,25 @@ export function PlayVideo() {
               {
                 roll: 'preRoll',
                 vastTag:
-                  'https://knowledgeable-tree.com/dom.FxzndbGyNXvsZ/GrUZ/nemmU9huSZPUBlAkPPeTVY_wgNDjxcFyOMUzYEptiNojiAk2/NJzDI/zfMji_ZHs/aSWm1YprdxD/0/xR',
+                  'https://knowledgeable-tree.com/dEmAFqzid.GBN/vtZUGDUS/heIma9iuJZFUtljk/PPT/Y/wBNtjPcbyHMPzcEItUNOjgA/2NNTzUIGzlM_itZTssaBWV1zp/daDX0Hxm',
                 adText: ''
               },
               {
                 roll: 'midRoll',
                 vastTag:
-                  'https://knowledgeable-tree.com/dom.FxzndbGyNXvsZ/GrUZ/nemmU9huSZPUBlAkPPeTVY_wgNDjxcFyOMUzYEptiNojiAk2/NJzDI/zfMji_ZHs/aSWm1YprdxD/0/xR',
+                  'https://knowledgeable-tree.com/dEmAFqzid.GBN/vtZUGDUS/heIma9iuJZFUtljk/PPT/Y/wBNtjPcbyHMPzcEItUNOjgA/2NNTzUIGzlM_itZTssaBWV1zp/daDX0Hxm',
                 adText: ''
               },
               {
                 roll: 'postRoll',
                 vastTag:
-                  'https://knowledgeable-tree.com/dom.FxzndbGyNXvsZ/GrUZ/nemmU9huSZPUBlAkPPeTVY_wgNDjxcFyOMUzYEptiNojiAk2/NJzDI/zfMji_ZHs/aSWm1YprdxD/0/xR',
+                  'https://knowledgeable-tree.com/dEmAFqzid.GBN/vtZUGDUS/heIma9iuJZFUtljk/PPT/Y/wBNtjPcbyHMPzcEItUNOjgA/2NNTzUIGzlM_itZTssaBWV1zp/daDX0Hxm',
                 adText: ''
               },
               {
                 roll: 'onPauseRoll',
                 vastTag:
-                  'https://knowledgeable-tree.com/dom.FxzndbGyNXvsZ/GrUZ/nemmU9huSZPUBlAkPPeTVY_wgNDjxcFyOMUzYEptiNojiAk2/NJzDI/zfMji_ZHs/aSWm1YprdxD/0/xR',
+                  'https://knowledgeable-tree.com/dEmAFqzid.GBN/vtZUGDUS/heIma9iuJZFUtljk/PPT/Y/wBNtjPcbyHMPzcEItUNOjgA/2NNTzUIGzlM_itZTssaBWV1zp/daDX0Hxm',
                 adText: ''
               }
             ],
