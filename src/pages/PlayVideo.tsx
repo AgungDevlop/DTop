@@ -1,6 +1,13 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FaCopy, FaVideo, FaPlay, FaSearch, FaDownload } from 'react-icons/fa';
+
+// Tambahkan deklarasi global untuk properti fluidPlayer pada objek window
+declare global {
+  interface Window {
+    fluidPlayer?: (elementId: string, options?: any) => void;
+  }
+}
 
 export function PlayVideo() {
   const { id } = useParams<{ id: string }>();
@@ -15,14 +22,14 @@ export function PlayVideo() {
   const videosPerPage = 10;
 
   // Array URL video dasar
-  const videoBaseUrls = ["https://doobs.top/e/"];
+  const videoBaseUrls = ['https://doobs.top/e/'];
 
   // Array URL untuk pop-under
   const randomUrls = [
-    "https://so-gr3at3.com/go/1237187",
-    "https://malakingannets.com/ic4wSTmH5JgaK77X/94691",
-    "https://meowadvertising.com/hc70ax5ct2?key=7df760c08ecfe3653c332fbdce13d42a",
-    "https://superficial-work.com/ba3RV.0YPk3Xp/v/b/mOVsJHZqDV0Y0KO/DVQWzkOvD/MK3pLvT/QJ4JNmDyM/4MMozHgS"
+    'https://so-gr3at3.com/go/1237187',
+    'https://malakingannets.com/ic4wSTmH5JgaK77X/94691',
+    'https://meowadvertising.com/hc70ax5ct2?key=7df760c08ecfe3653c332fbdce13d42a',
+    'https://superficial-work.com/ba3RV.0YPk3Xp/v/b/mOVsJHZqDV0Y0KO/DVQWzkOvD/MK3pLvT/QJ4JNmDyM/4MMozHgS'
   ];
 
   useEffect(() => {
@@ -142,41 +149,41 @@ export function PlayVideo() {
             allowDownload: false,
             playButtonShowing: true,
             fillToContainer: false,
-            posterImage: ""
+            posterImage: ''
           },
           vastOptions: {
             adList: [
               {
-                roll: "preRoll",
+                roll: 'preRoll',
                 vastTag:
-                  "https://knowledgeable-tree.com/dom.FxzndbGyNXvsZ/GrUZ/nemmU9huSZPUBlAkPPeTVY_wgNDjxcFyOMUzYEptiNojiAk2/NJzDI/zfMji_ZHs/aSWm1YprdxD/0/xR",
-                adText: ""
+                  'https://knowledgeable-tree.com/dom.FxzndbGyNXvsZ/GrUZ/nemmU9huSZPUBlAkPPeTVY_wgNDjxcFyOMUzYEptiNojiAk2/NJzDI/zfMji_ZHs/aSWm1YprdxD/0/xR',
+                adText: ''
               },
               {
-                roll: "midRoll",
+                roll: 'midRoll',
                 vastTag:
-                  "https://knowledgeable-tree.com/dom.FxzndbGyNXvsZ/GrUZ/nemmU9huSZPUBlAkPPeTVY_wgNDjxcFyOMUzYEptiNojiAk2/NJzDI/zfMji_ZHs/aSWm1YprdxD/0/xR",
-                adText: ""
+                  'https://knowledgeable-tree.com/dom.FxzndbGyNXvsZ/GrUZ/nemmU9huSZPUBlAkPPeTVY_wgNDjxcFyOMUzYEptiNojiAk2/NJzDI/zfMji_ZHs/aSWm1YprdxD/0/xR',
+                adText: ''
               },
               {
-                roll: "postRoll",
+                roll: 'postRoll',
                 vastTag:
-                  "https://knowledgeable-tree.com/dom.FxzndbGyNXvsZ/GrUZ/nemmU9huSZPUBlAkPPeTVY_wgNDjxcFyOMUzYEptiNojiAk2/NJzDI/zfMji_ZHs/aSWm1YprdxD/0/xR",
-                adText: ""
+                  'https://knowledgeable-tree.com/dom.FxzndbGyNXvsZ/GrUZ/nemmU9huSZPUBlAkPPeTVY_wgNDjxcFyOMUzYEptiNojiAk2/NJzDI/zfMji_ZHs/aSWm1YprdxD/0/xR',
+                adText: ''
               },
               {
-                roll: "onPauseRoll",
+                roll: 'onPauseRoll',
                 vastTag:
-                  "https://knowledgeable-tree.com/dom.FxzndbGyNXvsZ/GrUZ/nemmU9huSZPUBlAkPPeTVY_wgNDjxcFyOMUzYEptiNojiAk2/NJzDI/zfMji_ZHs/aSWm1YprdxD/0/xR",
-                adText: ""
+                  'https://knowledgeable-tree.com/dom.FxzndbGyNXvsZ/GrUZ/nemmU9huSZPUBlAkPPeTVY_wgNDjxcFyOMUzYEptiNojiAk2/NJzDI/zfMji_ZHs/aSWm1YprdxD/0/xR',
+                adText: ''
               }
             ],
             adCTAText: false,
-            adCTATextPosition: ""
+            adCTATextPosition: ''
           }
         });
       } else {
-        console.error("Fluid Player library belum termuat.");
+        console.error('Fluid Player library belum termuat.');
       }
     }
   }, [loading, videoUrl]);
@@ -284,7 +291,9 @@ export function PlayVideo() {
                 <button
                   key={pageNumber}
                   onClick={() => handlePageChange(pageNumber)}
-                  className={`mx-1 p-2 rounded ${currentPage === pageNumber ? 'bg-blue-500' : 'bg-gray-700'} hover:bg-blue-600 transition-colors text-white`}
+                  className={`mx-1 p-2 rounded ${
+                    currentPage === pageNumber ? 'bg-blue-500' : 'bg-gray-700'
+                  } hover:bg-blue-600 transition-colors text-white`}
                 >
                   {pageNumber}
                 </button>
