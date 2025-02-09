@@ -23,6 +23,26 @@ const router = createBrowserRouter([
         element: <PlayVideo />,
       },
       {
+        path: "d/:id", // Rute baru untuk format `/e/:id`
+        element: <PlayVideo />,
+      },
+      {
+        path: "v/:id", // Rute baru untuk format `/e/:id`
+        element: <PlayVideo />,
+      },
+      {
+        path: "play/:id", // Rute baru untuk format `/e/:id`
+        element: <PlayVideo />,
+      },
+      {
+        path: "view/:id", // Rute baru untuk format `/e/:id`
+        element: <PlayVideo />,
+      },
+      {
+        path: "share/:id", // Rute baru untuk format `/e/:id`
+        element: <PlayVideo />,
+      },
+      {
         path: "download", // Rute untuk halaman Download
         element: <Download />,
       },
