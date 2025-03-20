@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaPlay, FaDownload, FaUpload } from 'react-icons/fa'; // Tambahkan FaUpload
+import { FaPlay, FaDownload, FaUpload } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -11,7 +11,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <header className="bg-blue-500 fixed top-0 left-0 w-full p-4 text-black flex items-center justify-between">
         <div className="flex items-center">
           <FaPlay className="mr-2" /> {/* Ikon play */}
-          <h1 className="text-2xl font-bold">DOODSTREAM INDO</h1>
+          <h1 className="text-xl font-bold">DOODSTREAM INDO</h1> {/* Ukuran teks diperkecil dari text-2xl ke text-xl */}
         </div>
         <a
           href="https://videhost.my.id"
