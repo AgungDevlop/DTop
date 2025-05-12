@@ -242,7 +242,7 @@ export function PlayVideo() {
       </div>
 
       {/* Daftar Video dalam Card Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         {currentVideos.map((video) => (
           <div
             key={video.id}
@@ -264,8 +264,8 @@ export function PlayVideo() {
                 />
               </video>
             </div>
-            {/* Judul Video */}
-            <h2 className="text-white font-medium text-sm break-words">{video.Judul}</h2>
+            {/* Judul Video dengan Ellipsis */}
+            <h2 className="text-white font-medium text-sm truncate">{video.Judul}</h2>
           </div>
         ))}
       </div>
