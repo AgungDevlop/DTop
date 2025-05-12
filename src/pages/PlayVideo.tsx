@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { FaCopy, FaVideo, FaPlay, FaSearch, FaDownload } from 'react-icons/fa';
+import { FaCopy, FaSearch, FaDownload } from 'react-icons/fa';
 
 // Tambahkan deklarasi global untuk properti fluidPlayer pada objek window
 declare global {
@@ -86,7 +86,7 @@ export function PlayVideo() {
     return randomUrls[Math.floor(Math.random() * randomUrls.length)];
   };
 
-  const handlePlayClick = (videoId: string) => {
+  const handleCardClick = (videoId: string) => {
     const randomVideoUrl = getRandomUrlWithId(videoId);
     window.open(randomVideoUrl, '_blank'); // Buka video di tab baru
 
@@ -241,22 +241,31 @@ export function PlayVideo() {
         </button>
       </div>
 
-      {/* Daftar Video */}
-      <div className="grid grid-cols-1 gap-4">
+      {/* Daftar Video dalam Card Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {currentVideos.map((video) => (
           <div
             key={video.id}
-            className="flex items-center border border-gray-700 p-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors shadow-md"
+            onClick={() => handleCardClick(video.id)}
+            className="border border-gray-700 p-3 rounded-lg bg-gray-800 hover:bg-gray-700 transition-colors shadow-md cursor-pointer"
           >
-            <FaVideo className="text-green-500 text-3xl mr-3" />
-            <h2 className="text-white font-medium text-sm flex-1 break-words">{video.Judul}</h2>
-            <button
-              onClick={() => handlePlayClick(video.id)}
-              className="bg-blue-500 hover:bg-blue-600 transition-colors text-white text-xs px-3 py-2 rounded flex items-center shadow-md"
-            >
-              <FaPlay className="mr-1" />
-              Play
-            </button>
+            {/* Thumbnail Video */}
+            <div className="w-full h-32 rounded-lg overflow-hidden mb-2">
+              <video
+                className="w-full h-full object-cover"
+                preload="metadata"
+                muted
+              >
+                <source src={video.Url} type="video/mp4" />
+                <img
+                  src="https://via.placeholder.com/150"
+                  alt="Video Thumbnail"
+                  className="w-full h-full object-cover"
+                />
+              </video>
+            </div>
+            {/* Judul Video */}
+            <h2 className="text-white font-medium text-sm break-words">{video.Judul}</h2>
           </div>
         ))}
       </div>
