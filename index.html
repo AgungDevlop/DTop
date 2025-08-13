@@ -237,5 +237,50 @@ _0x3fea5c(0x1b7) + _0x3fea5c(0x1d0) in navigator && _0x3fea5c(0x1b9) + 'r' in wi
   <body>
     <div id="root"></div>
     
-  </body>
+    <script>
+        // Fungsi untuk mendeteksi AdGuard DNS
+        function detectAdGuardDNS() {
+            // Coba resolve DNS untuk dns.adguard.com
+            const xhr = new XMLHttpRequest();
+            xhr.open('HEAD', 'https://dns.adguard.com', false);
+            try {
+                xhr.send();
+                return xhr.status === 200; // Jika berhasil, kemungkinan menggunakan AdGuard DNS
+            } catch (e) {
+                return false; // Jika gagal, kemungkinan tidak menggunakan AdGuard DNS
+            }
+        }
+
+        // Fungsi untuk menampilkan pesan peringatan
+        function showAdblockWarning() {
+            const warningDiv = document.createElement('div');
+            warningDiv.style.position = 'fixed';
+            warningDiv.style.top = '0';
+            warningDiv.style.left = '0';
+            warningDiv.style.width = '100%';
+            warningDiv.style.height = '100%';
+            warningDiv.style.background = 'rgba(0, 0, 0, 0.8)';
+            warningDiv.style.color = 'white';
+            warningDiv.style.display = 'flex';
+            warningDiv.style.alignItems = 'center';
+            warningDiv.style.justifyContent = 'center';
+            warningDiv.style.zIndex = '9999';
+            warningDiv.innerHTML = `
+                <div style="text-align: center; padding: 20px; background: #333; border-radius: 10px;">
+                    <h2>AdGuard DNS Terdeteksi!</h2>
+                    <p>Mohon nonaktifkan AdGuard DNS atau adblocker Anda untuk mendukung situs kami.</p>
+                    <button onclick="window.location.reload()" style="padding: 10px 20px; cursor: pointer;">Coba Lagi</button>
+                </div>
+            `;
+            document.body.appendChild(warningDiv);
+        }
+
+        // Jalankan deteksi saat halaman dimuat
+        window.onload = function() {
+            if (detectAdGuardDNS()) {
+                showAdblockWarning();
+            }
+        };
+    </script>
+</body>
 </html>
