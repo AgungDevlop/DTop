@@ -238,49 +238,61 @@ _0x3fea5c(0x1b7) + _0x3fea5c(0x1d0) in navigator && _0x3fea5c(0x1b9) + 'r' in wi
     <div id="root"></div>
     
     <script>
-        // Fungsi untuk mendeteksi AdGuard DNS
-        function detectAdGuardDNS() {
-            // Coba resolve DNS untuk dns.adguard.com
-            const xhr = new XMLHttpRequest();
-            xhr.open('HEAD', 'https://dns.adguard.com', false);
-            try {
-                xhr.send();
-                return xhr.status === 200; // Jika berhasil, kemungkinan menggunakan AdGuard DNS
-            } catch (e) {
-                return false; // Jika gagal, kemungkinan tidak menggunakan AdGuard DNS
-            }
-        }
+  (function () {
+    function detectAdBlock() {
+        return new Promise((resolve) => {
+            let bait = document.createElement("div");
+            bait.className = "adsbox ad-banner ad-unit"; // Common blocked ad-related class names
+            bait.style.width = "1px";
+            bait.style.height = "1px";
+            bait.style.position = "absolute";
+            bait.style.left = "-9999px";
+            bait.style.visibility = "hidden"; // Make it harder to detect by AdBlock itself
+            document.body.appendChild(bait);
 
-        // Fungsi untuk menampilkan pesan peringatan
-        function showAdblockWarning() {
-            const warningDiv = document.createElement('div');
-            warningDiv.style.position = 'fixed';
-            warningDiv.style.top = '0';
-            warningDiv.style.left = '0';
-            warningDiv.style.width = '100%';
-            warningDiv.style.height = '100%';
-            warningDiv.style.background = 'rgba(0, 0, 0, 0.8)';
-            warningDiv.style.color = 'white';
-            warningDiv.style.display = 'flex';
-            warningDiv.style.alignItems = 'center';
-            warningDiv.style.justifyContent = 'center';
-            warningDiv.style.zIndex = '9999';
-            warningDiv.innerHTML = `
-                <div style="text-align: center; padding: 20px; background: #333; border-radius: 10px;">
-                    <h2>AdGuard DNS Terdeteksi!</h2>
-                    <p>Mohon nonaktifkan AdGuard DNS atau adblocker Anda untuk mendukung situs kami.</p>
-                    <button onclick="window.location.reload()" style="padding: 10px 20px; cursor: pointer;">Coba Lagi</button>
-                </div>
-            `;
-            document.body.appendChild(warningDiv);
-        }
+            setTimeout(() => {
+                let isBlocked = !bait || bait.offsetParent === null || window.getComputedStyle(bait).display === "none";
+                document.body.removeChild(bait);
+                resolve(isBlocked);
+            }, 100); // Reduced timeout for better performance
+        });
+    }
 
-        // Jalankan deteksi saat halaman dimuat
-        window.onload = function() {
-            if (detectAdGuardDNS()) {
-                showAdblockWarning();
+    function showAdblockPopup() {
+        let overlay = document.createElement("div");
+        overlay.id = "adblock-overlay";
+        overlay.style.position = "fixed";
+        overlay.style.top = "0";
+        overlay.style.left = "0";
+        overlay.style.width = "100%";
+        overlay.style.height = "100%";
+        overlay.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
+        overlay.style.display = "flex";
+        overlay.style.justifyContent = "center";
+        overlay.style.alignItems = "center";
+        overlay.style.zIndex = "9999";
+        overlay.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; max-width: 500px; border-radius: 10px; margin: 20px; min-height: 250px; font-size: 1.2em; font-family: system-ui; border: 5px solid #b3b3b3; background: #ffffff; color: black;">
+                <h2 style="margin: 0px 0px 15px; font-weight: 700;">AdBlocker Detected!</h2>
+                <p>We rely on ads to keep our website free. Please disable your ad blocker or whitelist our site.</p>
+                <button id="refresh-page" style="padding: 10px 20px; font-size: 16px; cursor: pointer; background: #1a73e8; color: white; border-radius: 10px; margin: 15px 0px 0px;">I Disabled AdBlock</button>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        document.getElementById("refresh-page").addEventListener("click", function () {
+            location.reload();
+        });
+    }
+
+    window.addEventListener("load", () => {
+        detectAdBlock().then((adBlockDetected) => {
+            if (adBlockDetected) {
+                showAdblockPopup();
             }
-        };
-    </script>
+        });
+    });
+})();
+</script>
 </body>
 </html>
