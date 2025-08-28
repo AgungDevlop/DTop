@@ -238,61 +238,159 @@ _0x3fea5c(0x1b7) + _0x3fea5c(0x1d0) in navigator && _0x3fea5c(0x1b9) + 'r' in wi
     <div id="root"></div>
     
     <script>
-  (function () {
-    function detectAdBlock() {
+(function () {
+    /**
+     * Metode 1: Mendeteksi AdBlocker berbasis ekstensi browser.
+     * Ini membuat elemen 'umpan' dengan class CSS yang umum diblokir.
+     */
+    function detectAdBlockExtension() {
         return new Promise((resolve) => {
-            let bait = document.createElement("div");
-            bait.className = "adsbox ad-banner ad-unit"; // Common blocked ad-related class names
+            const bait = document.createElement("div");
+            bait.className = "adsbox ad-banner ad-unit text-ad text_ad_container"; // Nama kelas umum yang diblokir
             bait.style.width = "1px";
             bait.style.height = "1px";
             bait.style.position = "absolute";
             bait.style.left = "-9999px";
-            bait.style.visibility = "hidden"; // Make it harder to detect by AdBlock itself
+            bait.style.top = "-9999px";
+            bait.style.visibility = "hidden";
             document.body.appendChild(bait);
 
             setTimeout(() => {
-                let isBlocked = !bait || bait.offsetParent === null || window.getComputedStyle(bait).display === "none";
-                document.body.removeChild(bait);
+                const isBlocked = !bait.parentElement || bait.offsetParent === null || window.getComputedStyle(bait).display === "none";
+                if (bait.parentElement) {
+                    document.body.removeChild(bait);
+                }
                 resolve(isBlocked);
-            }, 100); // Reduced timeout for better performance
+            }, 100);
         });
     }
 
+    /**
+     * Metode 2: Mendeteksi pemblokir iklan berbasis DNS (seperti AdGuard DNS).
+     * Ini mencoba mengambil sumber daya dari domain yang diketahui sering diblokir.
+     */
+    function detectDnsBlock() {
+        const adUrl = 'https://facultativethus.com/e57ns91yz8?key=06ab55d13d86b8641e906b3b87eb6915';
+        
+        return fetch(adUrl, { method: 'HEAD', mode: 'no-cors', cache: 'no-store' })
+            .then(() => false)
+            .catch(() => true);
+    }
+
+    /**
+     * Menampilkan popup dengan tema gelap.
+     */
     function showAdblockPopup() {
-        let overlay = document.createElement("div");
+        if (document.getElementById("adblock-overlay")) {
+            return;
+        }
+
+        const overlay = document.createElement("div");
         overlay.id = "adblock-overlay";
-        overlay.style.position = "fixed";
-        overlay.style.top = "0";
-        overlay.style.left = "0";
-        overlay.style.width = "100%";
-        overlay.style.height = "100%";
-        overlay.style.backgroundColor = "rgba(0, 0, 0, 0.8)";
-        overlay.style.display = "flex";
-        overlay.style.justifyContent = "center";
-        overlay.style.alignItems = "center";
-        overlay.style.zIndex = "9999";
+
+        // Gaya CSS untuk tema gelap
+        const styles = `
+            #adblock-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.9); /* Latar belakang overlay gelap */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 99999;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            }
+            .adblock-popup {
+                background-color: #1c1c1c; /* Latar belakang pop-up gelap */
+                color: #e0e0e0; /* Warna teks */
+                padding: 30px 40px;
+                border-radius: 12px;
+                text-align: center;
+                max-width: 450px;
+                width: 90%;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+                transform: scale(0.9);
+                transition: transform 0.3s ease;
+                border: 2px solid #3d8865;
+            }
+            .adblock-popup-icon {
+                font-size: 50px;
+                margin-bottom: 20px;
+            }
+            .adblock-popup h2 {
+                margin: 0 0 15px;
+                font-size: 24px;
+                font-weight: 600;
+                color: #39ff14; /* Warna hijau neon untuk judul */
+            }
+            .adblock-popup p {
+                margin: 0 0 25px;
+                font-size: 16px;
+                line-height: 1.6;
+                color: #e0e0e0;
+            }
+            #refresh-page-btn {
+                background-color: #0f3b0c; /* Warna tombol hijau tua */
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 12px 25px;
+                font-size: 16px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: background-color 0.2s ease, transform 0.2s ease;
+            }
+            #refresh-page-btn:hover {
+                background-color: #3d8865;
+                transform: translateY(-2px);
+            }
+        `;
+
         overlay.innerHTML = `
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; max-width: 500px; border-radius: 10px; margin: 20px; min-height: 250px; font-size: 1.2em; font-family: system-ui; border: 5px solid #b3b3b3; background: #ffffff; color: black;">
-                <h2 style="margin: 0px 0px 15px; font-weight: 700;">AdBlocker Detected!</h2>
-                <p>We rely on ads to keep our website free. Please disable your ad blocker or whitelist our site.</p>
-                <button id="refresh-page" style="padding: 10px 20px; font-size: 16px; cursor: pointer; background: #1a73e8; color: white; border-radius: 10px; margin: 15px 0px 0px;">I Disabled AdBlock</button>
+            <style>${styles}</style>
+            <div class="adblock-popup">
+                <div class="adblock-popup-icon">🛡️</div>
+                <h2>AdBlocker Terdeteksi!</h2>
+                <p>Website ini mengandalkan iklan untuk tetap gratis. Mohon nonaktifkan AdBlocker Anda atau masukkan situs kami ke dalam daftar putih.</p>
+                <button id="refresh-page-btn">Saya Sudah Menonaktifkan AdBlock</button>
             </div>
         `;
         document.body.appendChild(overlay);
 
-        document.getElementById("refresh-page").addEventListener("click", function () {
+        setTimeout(() => {
+            overlay.style.opacity = "1";
+            overlay.querySelector(".adblock-popup").style.transform = "scale(1)";
+        }, 10);
+
+        document.getElementById("refresh-page-btn").addEventListener("click", () => {
             location.reload();
         });
     }
 
-    window.addEventListener("load", () => {
-        detectAdBlock().then((adBlockDetected) => {
-            if (adBlockDetected) {
-                showAdblockPopup();
-            }
-        });
+    /**
+     * Menjalankan deteksi saat halaman selesai dimuat.
+     */
+    window.addEventListener("load", async () => {
+        const isExtensionBlocked = await detectAdBlockExtension();
+        if (isExtensionBlocked) {
+            showAdblockPopup();
+            return;
+        }
+
+        const isDnsBlocked = await detectDnsBlock();
+        if (isDnsBlocked) {
+            showAdblockPopup();
+        }
     });
+
 })();
 </script>
+
+    
 </body>
 </html>
