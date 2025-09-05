@@ -26,7 +26,7 @@ export function PlayVideo() {
 
   // Array URL untuk pop-under
   const randomUrls = [
-    'https://adclickad.com/get/?spot_id=6089412&cat=25&subid=2067093145',
+    'https://viidedss.com/dc/?blockID=388556',
     'https://enviousgarbage.com/HE9TFh',
     'https://aviatorreproducesauciness.com/2082665',
     'https://superficial-work.com/ba3RV.0YPk3Xp/v/b/mOVsJHZqDV0Y0KO/DVQWzkOvD/MK3pLvT/QJ4JNmDyM/4MMozHgS'
