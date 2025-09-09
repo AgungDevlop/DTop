@@ -31,6 +31,10 @@ const router = createBrowserRouter([
         element: <PlayVideo />,
       },
       {
+        path: "f/:id", // Rute baru untuk format `/e/:id`
+        element: <PlayVideo />,
+      },
+      {
         path: "play/:id", // Rute baru untuk format `/e/:id`
         element: <PlayVideo />,
       },
