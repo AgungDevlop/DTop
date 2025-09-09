@@ -24,12 +24,11 @@ export function PlayVideo() {
   // Array URL video dasar
   const videoBaseUrls = ['https://doobs.top/e/'];
 
-  // Array URL untuk pop-under
   const randomUrls = [
-    'https://viidedss.com/dc/?blockID=388556',
     'https://enviousgarbage.com/HE9TFh',
+    'https://obqj2.com/4/9587058',
     'https://aviatorreproducesauciness.com/2082665',
-    'https://superficial-work.com/ba3RV.0YPk3Xp/v/b/mOVsJHZqDV0Y0KO/DVQWzkOvD/MK3pLvT/QJ4JNmDyM/4MMozHgS'
+    'https://viidedss.com/dc/?blockID=388556'
   ];
 
   useEffect(() => {
