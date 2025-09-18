@@ -14,7 +14,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           <h1 className="text-xl font-bold">DOODSTREAM INDO</h1> {/* Ukuran teks diperkecil dari text-2xl ke text-xl */}
         </div>
         <a
-          href="https://videhost.my.id"
+          href="https://viplay.top/"
           className="bg-black text-white px-3 py-1 rounded flex items-center space-x-2"
           target="_blank"
           rel="noopener noreferrer"
