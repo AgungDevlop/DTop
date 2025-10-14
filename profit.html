@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,6 +61,8 @@
     <script>
         document.getElementById('fetch-data-btn').addEventListener('click', () => {
             const zoneIdsInput = document.getElementById('zone-ids').value;
+            // Nilai dari input type="date" SELALU berformat "YYYY-MM-DD" di JavaScript,
+            // tidak peduli bagaimana format tampilannya di browser. Ini sudah aman.
             const dateValue = document.getElementById('date-filter').value;
             const loadingSpinner = document.getElementById('loading-spinner');
             const tableBody = document.getElementById('table-data');
@@ -75,26 +77,32 @@
                 return;
             }
 
-            // Gunakan tanggal yang dipilih, atau tanggal hari ini jika kosong
-            const selectedDate = dateValue || new Date().toISOString().slice(0, 10);
+            // Gunakan tanggal yang dipilih, atau tanggal hari ini jika kosong. Formatnya adalah YYYY-MM-DD.
+            const dateForApi = dateValue || new Date().toISOString().slice(0, 10);
+
+            // --- BARU: Buat format tanggal untuk ditampilkan ke pengguna (DD-MM-YYYY) ---
+            const dateParts = dateForApi.split('-');
+            const displayDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
 
             // Reset tampilan
             tableBody.innerHTML = '';
             totalRevenueEl.textContent = 'Rp 0';
             loadingSpinner.classList.remove('hidden');
-            analyticsTitle.textContent = `Analytics Tanggal ${selectedDate}`;
-            totalRevenueTitle.textContent = `Total Pendapatan Tanggal ${selectedDate}: `;
+            // Gunakan format displayDate untuk judul
+            analyticsTitle.textContent = `Analytics Tanggal ${displayDate}`;
+            totalRevenueTitle.textContent = `Total Pendapatan Tanggal ${displayDate}: `;
 
 
             const apiKey = 'FEuvZwmnwqc7n44z3C0Kcr56GDuclQg7pMlPDeR0JVhXfX2bMP80Q8hM92k5yRzx';
             const usdToIdrExchangeRate = 15500;
 
+            // Gunakan `dateForApi` (YYYY-MM-DD) untuk URL API
             const createApiUrl = (zoneId, date) => `https://hilltopads.com/api/publisher/listStats?key=${apiKey}&date=${date}&geo=ID&zoneId=${zoneId}`;
 
             let totalRevenue = 0;
             const fetchPromises = [];
 
-            const fetchData = (apiUrl, zoneId, date) => {
+            const fetchData = (apiUrl, zoneId, date, displayDate) => {
                 return fetch(apiUrl)
                     .then(response => response.json())
                     .then(data => {
@@ -107,7 +115,7 @@
                             const row = `
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${zoneId}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${date}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${displayDate}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${(parseFloat(result.cpm) * usdToIdrExchangeRate).toLocaleString('id-ID')}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${parseInt(result.impressions).toLocaleString('id-ID')}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-800">${revenueInIdr.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</td>
@@ -118,7 +126,7 @@
                              const row = `
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${zoneId}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${date}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${displayDate}</td>
                                     <td colspan="3" class="px-6 py-4 text-center text-sm text-red-500">Gagal memuat atau tidak ada data</td>
                                 </tr>
                             `;
@@ -130,7 +138,7 @@
                          const row = `
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${zoneId}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${date}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${displayDate}</td>
                                     <td colspan="3" class="px-6 py-4 text-center text-sm text-red-500">Terjadi kesalahan jaringan</td>
                                 </tr>
                             `;
@@ -139,7 +147,7 @@
             };
 
             zoneIds.forEach(zoneId => {
-                fetchPromises.push(fetchData(createApiUrl(zoneId, selectedDate), zoneId, selectedDate));
+                fetchPromises.push(fetchData(createApiUrl(zoneId, dateForApi), zoneId, dateForApi, displayDate));
             });
 
             Promise.all(fetchPromises).then(() => {
