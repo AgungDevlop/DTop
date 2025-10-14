@@ -1,134 +1,254 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stats Filter</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Hilltop Ads Analytics and Balance</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 font-sans">
-    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
-        <h1 class="text-2xl sm:text-3xl font-bold text-center mb-6">Stats Filter</h1>
+<body class="bg-gray-100 p-4 sm:p-6 md:p-8">
+    <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl sm:text-3xl font-bold mb-6 text-center text-gray-800">Laporan Penghasilan Iklan</h1>
 
-        <!-- Filter Form -->
-        <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                    <label for="date" class="block text-sm font-medium text-gray-700">Select Date</label>
-                    <input type="date" id="date" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div>
-                    <label for="siteId" class="block text-sm font-medium text-gray-700">Select Domain</label>
-                    <select id="siteId" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">Select a domain</option>
-                        <option value="855985">videq.doobs.top</option>
-                        <option value="855979">videv.doobs.top</option>
-                        <option value="855978">videy.doobs.top</option>
-                        <option value="855968">videy.doobs.my.id</option>
-                        <option value="808736">doobs.my.id</option>
-                        <option value="807997">doobs.top</option>
-                    </select>
-                </div>
+        <!-- Bagian Filter -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 border rounded-lg bg-gray-50">
+            <div class="md:col-span-2">
+                <label for="site-select" class="block text-sm font-medium text-gray-700 mb-1">Pilih Situs</label>
+                <select id="site-select" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></select>
             </div>
-            <button id="filterBtn" class="mt-4 w-full sm:w-auto bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Filter</button>
+            <div>
+                <label for="date-picker" class="block text-sm font-medium text-gray-700 mb-1">Pilih Tanggal</label>
+                <input type="date" id="date-picker" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <div class="md:col-span-3 text-center">
+                 <button id="filter-btn" class="w-full md:w-auto bg-indigo-600 text-white font-bold py-2 px-8 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                    Tampilkan Data
+                </button>
+            </div>
+        </div>
+        
+        <!-- Status Loading dan Error -->
+        <div id="status-container" class="text-center my-4"></div>
+
+        <!-- Bagian Analytics -->
+        <div id="analytics-section" class="hidden">
+            <h2 class="text-2xl font-semibold my-4">Analytics</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full table-auto">
+                    <thead>
+                        <tr class="bg-gray-200 text-left">
+                            <th class="border px-4 py-2">Situs</th>
+                            <th class="border px-4 py-2">Tanggal</th>
+                            <th class="border px-4 py-2">Impressions</th>
+                            <th class="border px-4 py-2">CPM (Rp)</th>
+                            <th class="border px-4 py-2">Pendapatan (Rp)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="analytics-table-body">
+                        <!-- Data analytics akan diisi di sini -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-right mt-4">
+                <h3 class="text-xl font-semibold inline">Total Pendapatan (Hasil Filter): </h3>
+                <span id="total-revenue" class="text-xl font-semibold">Rp 0</span>
+            </div>
         </div>
 
-        <!-- Error Message -->
-        <div id="errorMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6"></div>
-
-        <!-- Results Table -->
-        <div id="results" class="bg-white p-4 sm:p-6 rounded-lg shadow-md overflow-x-auto">
-            <table class="w-full text-left text-sm">
-                <thead>
-                    <tr class="bg-gray-200">
-                        <th class="p-2 sm:p-3">Domain</th>
-                        <th class="p-2 sm:p-3">Impressions</th>
-                        <th class="p-2 sm:p-3">CPM (USD)</th>
-                        <th class="p-2 sm:p-3">Revenue (USD)</th>
-                    </tr>
-                </thead>
-                <tbody id="statsTable"></tbody>
-            </table>
-            <p id="noData" class="hidden text-center text-gray-500 mt-4">No data available</p>
+        <!-- Bagian Saldo -->
+        <div id="balance-section" class="hidden">
+            <h2 class="text-2xl font-semibold mb-4 mt-8">Saldo Akun</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full table-auto">
+                    <thead>
+                        <tr class="bg-gray-200 text-left">
+                            <th class="border px-4 py-2">Nama</th>
+                            <th class="border px-4 py-2">Persentase</th>
+                            <th class="border px-4 py-2">Saldo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border px-4 py-2 font-medium">Total Saldo (USD)</td>
+                            <td class="border px-4 py-2">100%</td>
+                            <td class="border px-4 py-2" id="balanceUSD">Memuat...</td>
+                        </tr>
+                        <tr>
+                            <td class="border px-4 py-2">Keep Sobs</td>
+                            <td class="border px-4 py-2">40%</td>
+                            <td class="border px-4 py-2" id="balance40">Memuat...</td>
+                        </tr>
+                        <tr>
+                            <td class="border px-4 py-2">Agung Developer</td>
+                            <td class="border px-4 py-2">60%</td>
+                            <td class="border px-4 py-2" id="balance60">Memuat...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+             <p id="totalBalance" class="text-lg mt-4 text-right font-semibold"></p>
         </div>
     </div>
 
     <script>
-        const apiKey = 'FEuvZwmnwqc7n44z3C0Kcr56GDuclQg7pMlPDeR0JVhXfX2bMP80Q8hM92k5yRzx';
-        const siteDomains = {
-            '855985': 'videq.doobs.top',
-            '855979': 'videv.doobs.top',
-            '855978': 'videy.doobs.top',
-            '855968': 'videy.doobs.my.id',
-            '808736': 'doobs.my.id',
-            '807997': 'doobs.top'
-        };
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- KONFIGURASI ---
+            const API_KEY = 'FEuvZwmnwqc7n44z3C0Kcr56GDuclQg7pMlPDeR0JVhXfX2bMP80Q8hM92k5yRzx';
+            const USD_TO_IDR_RATE = 15500; // Ganti dengan kurs terkini
+            const SITES = [
+                { id: '855985', domain: 'videq.doobs.top' },
+                { id: '855979', domain: 'videv.doobs.top' },
+                { id: '855978', domain: 'videy.doobs.top' },
+                { id: '855968', domain: 'videy.doobs.my.id' },
+                { id: '808736', domain: 'doobs.my.id' },
+                { id: '807997', domain: 'doobs.top' }
+            ];
 
-        document.getElementById('filterBtn').addEventListener('click', async () => {
-            const date = document.getElementById('date').value;
-            const siteId = document.getElementById('siteId').value;
-            const statsTable = document.getElementById('statsTable');
-            const noData = document.getElementById('noData');
-            const errorMessage = document.getElementById('errorMessage');
+            // --- ELEMEN DOM ---
+            const siteSelect = document.getElementById('site-select');
+            const datePicker = document.getElementById('date-picker');
+            const filterBtn = document.getElementById('filter-btn');
+            const statusContainer = document.getElementById('status-container');
+            const analyticsSection = document.getElementById('analytics-section');
+            const balanceSection = document.getElementById('balance-section');
+            const analyticsTableBody = document.getElementById('analytics-table-body');
+            const totalRevenueEl = document.getElementById('total-revenue');
 
-            // Clear previous results and error
-            statsTable.innerHTML = '';
-            noData.classList.add('hidden');
-            errorMessage.classList.add('hidden');
-            errorMessage.textContent = '';
+            // --- FUNGSI ---
 
-            if (!date || !siteId) {
-                errorMessage.textContent = 'Please select both a date and a domain.';
-                errorMessage.classList.remove('hidden');
-                return;
-            }
+            // Fungsi untuk format angka ke Rupiah
+            const formatToIDR = (amount) => {
+                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 2 }).format(amount);
+            };
 
-            try {
-                console.log('Fetching data for:', { siteId, date }); // Debug: Log request params
-                const response = await fetch(`https://api.hilltopads.com/publisher/listStats?key=${apiKey}&siteId=${siteId}&date=${date}`, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'application/json'
-                    }
+            // Fungsi untuk menampilkan status (loading/error)
+            const showStatus = (message, isError = false) => {
+                statusContainer.innerHTML = `<p class="${isError ? 'text-red-500' : 'text-blue-500'}">${message}</p>`;
+            };
+            
+            // Fungsi untuk membersihkan status
+            const clearStatus = () => {
+                statusContainer.innerHTML = '';
+            };
+
+            // Inisialisasi halaman
+            const initialize = () => {
+                // Isi dropdown situs
+                SITES.forEach(site => {
+                    const option = document.createElement('option');
+                    option.value = site.id;
+                    option.textContent = site.domain;
+                    siteSelect.appendChild(option);
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+                // Set tanggal hari ini
+                datePicker.value = new Date().toISOString().slice(0, 10);
+
+                // Tambahkan event listener ke tombol
+                filterBtn.addEventListener('click', handleFilterClick);
+                
+                // Langsung muat data saldo saat halaman pertama kali dibuka
+                fetchAndDisplayBalance();
+            };
+
+            // Fungsi untuk mengambil dan menampilkan data saldo
+            const fetchAndDisplayBalance = async () => {
+                const apiUrl = `https://api.hilltopads.com/api/publisher/balance?key=${API_KEY}`;
+                try {
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) throw new Error(`Network response was not ok (${response.status})`);
+                    
+                    const data = await response.json();
+                    if (data.status !== 'success') throw new Error('API request for balance failed');
+
+                    const balanceUsd = parseFloat(data.result.balance);
+                    const balanceIdr = balanceUsd * USD_TO_IDR_RATE;
+
+                    document.getElementById('balanceUSD').textContent = `$ ${balanceUsd.toFixed(2)}`;
+                    document.getElementById('balance40').textContent = formatToIDR(balanceIdr * 0.4);
+                    document.getElementById('balance60').textContent = formatToIDR(balanceIdr * 0.6);
+                    document.getElementById('totalBalance').textContent = `Total Saldo Keseluruhan: ${formatToIDR(balanceIdr)}`;
+                    
+                    balanceSection.classList.remove('hidden');
+
+                } catch (error) {
+                    console.error('Error fetching balance:', error);
+                    showStatus(`Gagal memuat saldo: ${error.message}`, true);
+                }
+            };
+            
+            // Fungsi utama yang dijalankan saat tombol filter diklik
+            const handleFilterClick = async () => {
+                const siteId = siteSelect.value;
+                const date = datePicker.value;
+                const selectedSite = SITES.find(s => s.id === siteId);
+
+                if (!date) {
+                    showStatus('Silakan pilih tanggal terlebih dahulu.', true);
+                    return;
                 }
 
-                const data = await response.json();
-                console.log('API Response:', JSON.stringify(data, null, 2)); // Debug: Log full response
+                showStatus('Memuat data analytics...');
+                analyticsSection.classList.add('hidden');
+                analyticsTableBody.innerHTML = '';
 
-                if (data.status === 'success' && data.result && data.result[date] && Array.isArray(data.result[date][0])) {
-                    const statsArray = data.result[date][0];
-                    if (statsArray.length === 0) {
-                        noData.classList.remove('hidden');
-                        errorMessage.textContent = 'No stats found for the selected date and domain.';
-                        errorMessage.classList.remove('hidden');
-                        return;
-                    }
+                const apiUrl = `https://api.hilltopads.com/publisher/listStats?key=${API_KEY}&siteId=${siteId}&date=${date}`;
 
-                    statsArray.forEach((stats, index) => {
-                        console.log(`Processing stats entry ${index}:`, stats); // Debug: Log each stats entry
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td class="p-2 sm:p-3">${siteDomains[siteId]}</td>
-                            <td class="p-2 sm:p-3">${stats.impressions || 0}</td>
-                            <td class="p-2 sm:p-3">${parseFloat(stats.cpm || 0).toFixed(5)}</td>
-                            <td class="p-2 sm:p-3">${parseFloat(stats.revenue || 0).toFixed(7)}</td>
-                        `;
-                        statsTable.appendChild(row);
+                try {
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) throw new Error(`Network response was not ok (${response.status})`);
+                    
+                    const data = await response.json();
+                    if (data.status !== 'success') throw new Error('Gagal mengambil data analytics dari API.');
+
+                    clearStatus();
+
+                    const dateKey = `${date} 00:00:00`;
+                    const statsArray = data.result[dateKey] || [];
+
+                    let totalImpressions = 0;
+                    let totalRevenueUSD = 0;
+                    let weightedCpmSum = 0;
+
+                    // Akumulasi data jika ada beberapa entri dalam sehari
+                    statsArray.forEach(stat => {
+                        const impressions = parseInt(stat.impressions, 10);
+                        const revenue = parseFloat(stat.revenue);
+                        const cpm = parseFloat(stat.cpm);
+                        
+                        totalImpressions += impressions;
+                        totalRevenueUSD += revenue;
+                        weightedCpmSum += cpm * impressions;
                     });
-                } else {
-                    errorMessage.textContent = 'Unexpected API response structure or no data for the selected date.';
-                    errorMessage.classList.remove('hidden');
-                    console.log('Invalid response structure:', data);
+
+                    const averageCpmUSD = totalImpressions > 0 ? weightedCpmSum / totalImpressions : 0;
+                    const totalRevenueIDR = totalRevenueUSD * USD_TO_IDR_RATE;
+                    const averageCpmIDR = averageCpmUSD * USD_TO_IDR_RATE;
+
+                    // Tampilkan di tabel
+                    const row = `
+                        <tr>
+                            <td class="border px-4 py-2">${selectedSite.domain}</td>
+                            <td class="border px-4 py-2">${date}</td>
+                            <td class="border px-4 py-2">${totalImpressions.toLocaleString('id-ID')}</td>
+                            <td class="border px-4 py-2">${formatToIDR(averageCpmIDR)}</td>
+                            <td class="border px-4 py-2">${formatToIDR(totalRevenueIDR)}</td>
+                        </tr>
+                    `;
+                    analyticsTableBody.innerHTML = row;
+                    totalRevenueEl.textContent = formatToIDR(totalRevenueIDR);
+                    analyticsSection.classList.remove('hidden');
+                    
+                } catch (error) {
+                    console.error('Error fetching analytics:', error);
+                    showStatus(`Gagal memuat analytics: ${error.message}`, true);
+                    analyticsTableBody.innerHTML = `<tr><td colspan="5" class="text-center border p-4 text-red-500">Gagal memuat data.</td></tr>`;
+                    analyticsSection.classList.remove('hidden');
                 }
-            } catch (error) {
-                console.error('Error fetching data:', error); // Debug: Log error details
-                errorMessage.textContent = `Error: ${error.message}. Check the console for details.`;
-                errorMessage.classList.remove('hidden');
-            }
+            };
+
+            // Jalankan inisialisasi
+            initialize();
         });
     </script>
 </body>
