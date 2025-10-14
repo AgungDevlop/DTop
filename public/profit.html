@@ -1,254 +1,151 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hilltop Ads Analytics and Balance</title>
+    <title>Hilltop Ads Analytics</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 p-4 sm:p-6 md:p-8">
-    <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-lg p-6">
-        <h1 class="text-2xl sm:text-3xl font-bold mb-6 text-center text-gray-800">Laporan Penghasilan Iklan</h1>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 w-full max-w-4xl">
+        <h1 class="text-3xl font-bold mb-6 text-gray-800 text-center">Laporan Penghasilan Iklan</h1>
 
-        <!-- Bagian Filter -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 border rounded-lg bg-gray-50">
-            <div class="md:col-span-2">
-                <label for="site-select" class="block text-sm font-medium text-gray-700 mb-1">Pilih Situs</label>
-                <select id="site-select" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></select>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+                <label for="zone-ids" class="block text-sm font-medium text-gray-700 mb-1">Zone ID</label>
+                <input type="text" id="zone-ids" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Pisahkan dengan koma">
+                <p class="mt-2 text-xs text-gray-500">Contoh: 4843838,4845176</p>
             </div>
             <div>
-                <label for="date-picker" class="block text-sm font-medium text-gray-700 mb-1">Pilih Tanggal</label>
-                <input type="date" id="date-picker" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-            </div>
-            <div class="md:col-span-3 text-center">
-                 <button id="filter-btn" class="w-full md:w-auto bg-indigo-600 text-white font-bold py-2 px-8 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
-                    Tampilkan Data
-                </button>
-            </div>
-        </div>
-        
-        <!-- Status Loading dan Error -->
-        <div id="status-container" class="text-center my-4"></div>
-
-        <!-- Bagian Analytics -->
-        <div id="analytics-section" class="hidden">
-            <h2 class="text-2xl font-semibold my-4">Analytics</h2>
-            <div class="overflow-x-auto">
-                <table class="w-full table-auto">
-                    <thead>
-                        <tr class="bg-gray-200 text-left">
-                            <th class="border px-4 py-2">Situs</th>
-                            <th class="border px-4 py-2">Tanggal</th>
-                            <th class="border px-4 py-2">Impressions</th>
-                            <th class="border px-4 py-2">CPM (Rp)</th>
-                            <th class="border px-4 py-2">Pendapatan (Rp)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="analytics-table-body">
-                        <!-- Data analytics akan diisi di sini -->
-                    </tbody>
-                </table>
-            </div>
-            <div class="text-right mt-4">
-                <h3 class="text-xl font-semibold inline">Total Pendapatan (Hasil Filter): </h3>
-                <span id="total-revenue" class="text-xl font-semibold">Rp 0</span>
+                <label for="date-filter" class="block text-sm font-medium text-gray-700 mb-1">Pilih Tanggal</label>
+                <input type="date" id="date-filter" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                 <p class="mt-2 text-xs text-gray-500">Kosongkan untuk tanggal hari ini.</p>
             </div>
         </div>
 
-        <!-- Bagian Saldo -->
-        <div id="balance-section" class="hidden">
-            <h2 class="text-2xl font-semibold mb-4 mt-8">Saldo Akun</h2>
-            <div class="overflow-x-auto">
-                <table class="w-full table-auto">
-                    <thead>
-                        <tr class="bg-gray-200 text-left">
-                            <th class="border px-4 py-2">Nama</th>
-                            <th class="border px-4 py-2">Persentase</th>
-                            <th class="border px-4 py-2">Saldo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="border px-4 py-2 font-medium">Total Saldo (USD)</td>
-                            <td class="border px-4 py-2">100%</td>
-                            <td class="border px-4 py-2" id="balanceUSD">Memuat...</td>
-                        </tr>
-                        <tr>
-                            <td class="border px-4 py-2">Keep Sobs</td>
-                            <td class="border px-4 py-2">40%</td>
-                            <td class="border px-4 py-2" id="balance40">Memuat...</td>
-                        </tr>
-                        <tr>
-                            <td class="border px-4 py-2">Agung Developer</td>
-                            <td class="border px-4 py-2">60%</td>
-                            <td class="border px-4 py-2" id="balance60">Memuat...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-             <p id="totalBalance" class="text-lg mt-4 text-right font-semibold"></p>
+        <button id="fetch-data-btn" class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out mb-6">
+            Ambil Data
+        </button>
+
+        <div id="loading-spinner" class="hidden text-center my-4">
+             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"></div>
+            <p class="text-gray-600 mt-2">Memuat data...</p>
+        </div>
+
+        <!-- Tabel hasil -->
+        <div class="overflow-x-auto">
+            <h2 id="analytics-title" class="text-2xl font-semibold my-4 text-gray-700">Analytics</h2>
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Zone ID</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CPM (RP)</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Impressions</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pendapatan (RP)</th>
+                    </tr>
+                </thead>
+                <tbody id="table-data" class="bg-white divide-y divide-gray-200">
+                    <!-- Data dari JavaScript akan dimasukkan di sini -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Total Pendapatan -->
+        <div class="mt-6 text-right">
+             <h2 id="total-revenue-title" class="text-xl font-semibold text-gray-800 inline">Total Pendapatan: </h2>
+             <span id="total-revenue" class="text-xl font-bold text-indigo-600">Rp 0</span>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- KONFIGURASI ---
-            const API_KEY = 'FEuvZwmnwqc7n44z3C0Kcr56GDuclQg7pMlPDeR0JVhXfX2bMP80Q8hM92k5yRzx';
-            const USD_TO_IDR_RATE = 15500; // Ganti dengan kurs terkini
-            const SITES = [
-                { id: '855985', domain: 'videq.doobs.top' },
-                { id: '855979', domain: 'videv.doobs.top' },
-                { id: '855978', domain: 'videy.doobs.top' },
-                { id: '855968', domain: 'videy.doobs.my.id' },
-                { id: '808736', domain: 'doobs.my.id' },
-                { id: '807997', domain: 'doobs.top' }
-            ];
-
-            // --- ELEMEN DOM ---
-            const siteSelect = document.getElementById('site-select');
-            const datePicker = document.getElementById('date-picker');
-            const filterBtn = document.getElementById('filter-btn');
-            const statusContainer = document.getElementById('status-container');
-            const analyticsSection = document.getElementById('analytics-section');
-            const balanceSection = document.getElementById('balance-section');
-            const analyticsTableBody = document.getElementById('analytics-table-body');
+        document.getElementById('fetch-data-btn').addEventListener('click', () => {
+            const zoneIdsInput = document.getElementById('zone-ids').value;
+            const dateValue = document.getElementById('date-filter').value;
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const tableBody = document.getElementById('table-data');
             const totalRevenueEl = document.getElementById('total-revenue');
+            const analyticsTitle = document.getElementById('analytics-title');
+            const totalRevenueTitle = document.getElementById('total-revenue-title');
 
-            // --- FUNGSI ---
+            const zoneIds = zoneIdsInput.split(',').map(id => id.trim()).filter(id => id);
 
-            // Fungsi untuk format angka ke Rupiah
-            const formatToIDR = (amount) => {
-                return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 2 }).format(amount);
-            };
+            if (zoneIds.length === 0) {
+                alert('Silakan masukkan setidaknya satu Zone ID.');
+                return;
+            }
 
-            // Fungsi untuk menampilkan status (loading/error)
-            const showStatus = (message, isError = false) => {
-                statusContainer.innerHTML = `<p class="${isError ? 'text-red-500' : 'text-blue-500'}">${message}</p>`;
-            };
-            
-            // Fungsi untuk membersihkan status
-            const clearStatus = () => {
-                statusContainer.innerHTML = '';
-            };
+            // Gunakan tanggal yang dipilih, atau tanggal hari ini jika kosong
+            const selectedDate = dateValue || new Date().toISOString().slice(0, 10);
 
-            // Inisialisasi halaman
-            const initialize = () => {
-                // Isi dropdown situs
-                SITES.forEach(site => {
-                    const option = document.createElement('option');
-                    option.value = site.id;
-                    option.textContent = site.domain;
-                    siteSelect.appendChild(option);
-                });
+            // Reset tampilan
+            tableBody.innerHTML = '';
+            totalRevenueEl.textContent = 'Rp 0';
+            loadingSpinner.classList.remove('hidden');
+            analyticsTitle.textContent = `Analytics Tanggal ${selectedDate}`;
+            totalRevenueTitle.textContent = `Total Pendapatan Tanggal ${selectedDate}: `;
 
-                // Set tanggal hari ini
-                datePicker.value = new Date().toISOString().slice(0, 10);
 
-                // Tambahkan event listener ke tombol
-                filterBtn.addEventListener('click', handleFilterClick);
-                
-                // Langsung muat data saldo saat halaman pertama kali dibuka
-                fetchAndDisplayBalance();
-            };
+            const apiKey = 'FEuvZwmnwqc7n44z3C0Kcr56GDuclQg7pMlPDeR0JVhXfX2bMP80Q8hM92k5yRzx';
+            const usdToIdrExchangeRate = 15500;
 
-            // Fungsi untuk mengambil dan menampilkan data saldo
-            const fetchAndDisplayBalance = async () => {
-                const apiUrl = `https://api.hilltopads.com/api/publisher/balance?key=${API_KEY}`;
-                try {
-                    const response = await fetch(apiUrl);
-                    if (!response.ok) throw new Error(`Network response was not ok (${response.status})`);
-                    
-                    const data = await response.json();
-                    if (data.status !== 'success') throw new Error('API request for balance failed');
+            const createApiUrl = (zoneId, date) => `https://hilltopads.com/api/publisher/listStats?key=${apiKey}&date=${date}&geo=ID&zoneId=${zoneId}`;
 
-                    const balanceUsd = parseFloat(data.result.balance);
-                    const balanceIdr = balanceUsd * USD_TO_IDR_RATE;
+            let totalRevenue = 0;
+            const fetchPromises = [];
 
-                    document.getElementById('balanceUSD').textContent = `$ ${balanceUsd.toFixed(2)}`;
-                    document.getElementById('balance40').textContent = formatToIDR(balanceIdr * 0.4);
-                    document.getElementById('balance60').textContent = formatToIDR(balanceIdr * 0.6);
-                    document.getElementById('totalBalance').textContent = `Total Saldo Keseluruhan: ${formatToIDR(balanceIdr)}`;
-                    
-                    balanceSection.classList.remove('hidden');
+            const fetchData = (apiUrl, zoneId, date) => {
+                return fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        const dateKey = `${date} 00:00:00`;
+                        if (data.status === 'success' && data.result[dateKey] && data.result[dateKey]['']) {
+                            const result = data.result[dateKey][''][0];
+                            const revenueInIdr = parseFloat(result.revenue) * usdToIdrExchangeRate;
+                            totalRevenue += revenueInIdr;
 
-                } catch (error) {
-                    console.error('Error fetching balance:', error);
-                    showStatus(`Gagal memuat saldo: ${error.message}`, true);
-                }
-            };
-            
-            // Fungsi utama yang dijalankan saat tombol filter diklik
-            const handleFilterClick = async () => {
-                const siteId = siteSelect.value;
-                const date = datePicker.value;
-                const selectedSite = SITES.find(s => s.id === siteId);
-
-                if (!date) {
-                    showStatus('Silakan pilih tanggal terlebih dahulu.', true);
-                    return;
-                }
-
-                showStatus('Memuat data analytics...');
-                analyticsSection.classList.add('hidden');
-                analyticsTableBody.innerHTML = '';
-
-                const apiUrl = `https://api.hilltopads.com/publisher/listStats?key=${API_KEY}&siteId=${siteId}&date=${date}`;
-
-                try {
-                    const response = await fetch(apiUrl);
-                    if (!response.ok) throw new Error(`Network response was not ok (${response.status})`);
-                    
-                    const data = await response.json();
-                    if (data.status !== 'success') throw new Error('Gagal mengambil data analytics dari API.');
-
-                    clearStatus();
-
-                    const dateKey = `${date} 00:00:00`;
-                    const statsArray = data.result[dateKey] || [];
-
-                    let totalImpressions = 0;
-                    let totalRevenueUSD = 0;
-                    let weightedCpmSum = 0;
-
-                    // Akumulasi data jika ada beberapa entri dalam sehari
-                    statsArray.forEach(stat => {
-                        const impressions = parseInt(stat.impressions, 10);
-                        const revenue = parseFloat(stat.revenue);
-                        const cpm = parseFloat(stat.cpm);
-                        
-                        totalImpressions += impressions;
-                        totalRevenueUSD += revenue;
-                        weightedCpmSum += cpm * impressions;
+                            const row = `
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${zoneId}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${date}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${(parseFloat(result.cpm) * usdToIdrExchangeRate).toLocaleString('id-ID')}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${parseInt(result.impressions).toLocaleString('id-ID')}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-800">${revenueInIdr.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</td>
+                                </tr>
+                            `;
+                            tableBody.innerHTML += row;
+                        } else {
+                             const row = `
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${zoneId}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${date}</td>
+                                    <td colspan="3" class="px-6 py-4 text-center text-sm text-red-500">Gagal memuat atau tidak ada data</td>
+                                </tr>
+                            `;
+                            tableBody.innerHTML += row;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data for Zone ID:', zoneId, error);
+                         const row = `
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${zoneId}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${date}</td>
+                                    <td colspan="3" class="px-6 py-4 text-center text-sm text-red-500">Terjadi kesalahan jaringan</td>
+                                </tr>
+                            `;
+                        tableBody.innerHTML += row;
                     });
-
-                    const averageCpmUSD = totalImpressions > 0 ? weightedCpmSum / totalImpressions : 0;
-                    const totalRevenueIDR = totalRevenueUSD * USD_TO_IDR_RATE;
-                    const averageCpmIDR = averageCpmUSD * USD_TO_IDR_RATE;
-
-                    // Tampilkan di tabel
-                    const row = `
-                        <tr>
-                            <td class="border px-4 py-2">${selectedSite.domain}</td>
-                            <td class="border px-4 py-2">${date}</td>
-                            <td class="border px-4 py-2">${totalImpressions.toLocaleString('id-ID')}</td>
-                            <td class="border px-4 py-2">${formatToIDR(averageCpmIDR)}</td>
-                            <td class="border px-4 py-2">${formatToIDR(totalRevenueIDR)}</td>
-                        </tr>
-                    `;
-                    analyticsTableBody.innerHTML = row;
-                    totalRevenueEl.textContent = formatToIDR(totalRevenueIDR);
-                    analyticsSection.classList.remove('hidden');
-                    
-                } catch (error) {
-                    console.error('Error fetching analytics:', error);
-                    showStatus(`Gagal memuat analytics: ${error.message}`, true);
-                    analyticsTableBody.innerHTML = `<tr><td colspan="5" class="text-center border p-4 text-red-500">Gagal memuat data.</td></tr>`;
-                    analyticsSection.classList.remove('hidden');
-                }
             };
 
-            // Jalankan inisialisasi
-            initialize();
+            zoneIds.forEach(zoneId => {
+                fetchPromises.push(fetchData(createApiUrl(zoneId, selectedDate), zoneId, selectedDate));
+            });
+
+            Promise.all(fetchPromises).then(() => {
+                totalRevenueEl.textContent = totalRevenue.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' });
+                loadingSpinner.classList.add('hidden');
+            });
         });
     </script>
 </body>
