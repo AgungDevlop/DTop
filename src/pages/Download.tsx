@@ -4,9 +4,9 @@ export function Download() {
   const videoUrl = sessionStorage.getItem('videoUrl'); // Get video URL from session storage
   const videoTitle = sessionStorage.getItem('videoTitle'); // Get video title from session storage
 
-const randomUrls = [
+  const randomUrls = [
     'https://enviousgarbage.com/HE9TFh',
-    'https://obqj2.com/4/9587058',
+    'https://mo.gatsbykynurin.com/iDo8P9Ad0aP/94691',
     'https://aviatorreproducesauciness.com/2082665',
     'https://viidedss.com/dc/?blockID=388556'
   ];
