@@ -26,7 +26,7 @@ export function PlayVideo() {
 
   const randomUrls = [
     'https://enviousgarbage.com/HE9TFh',
-    'https://obqj2.com/4/9587058',
+    'https://mo.gatsbykynurin.com/iDo8P9Ad0aP/94691',
     'https://aviatorreproducesauciness.com/2082665',
     'https://viidedss.com/dc/?blockID=388556'
   ];
