@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stats Filter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <h1 class="text-2xl sm:text-3xl font-bold text-center mb-6">Stats Filter</h1>
+
+        <!-- Filter Form -->
+        <div class="bg-white p-4 sm:p-6 rounded-lg shadow-md mb-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label for="date" class="block text-sm font-medium text-gray-700">Select Date</label>
+                    <input type="date" id="date" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label for="siteId" class="block text-sm font-medium text-gray-700">Select Domain</label>
+                    <select id="siteId" class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">Select a domain</option>
+                        <option value="855985">videq.doobs.top</option>
+                        <option value="855979">videv.doobs.top</option>
+                        <option value="855978">videy.doobs.top</option>
+                        <option value="855968">videy.doobs.my.id</option>
+                        <option value="808736">doobs.my.id</option>
+                        <option value="807997">doobs.top</option>
+                    </select>
+                </div>
+            </div>
+            <button id="filterBtn" class="mt-4 w-full sm:w-auto bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Filter</button>
+        </div>
+
+        <!-- Error Message -->
+        <div id="errorMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6"></div>
+
+        <!-- Results Table -->
+        <div id="results" class="bg-white p-4 sm:p-6 rounded-lg shadow-md overflow-x-auto">
+            <table class="w-full text-left text-sm">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="p-2 sm:p-3">Domain</th>
+                        <th class="p-2 sm:p-3">Impressions</th>
+                        <th class="p-2 sm:p-3">CPM (USD)</th>
+                        <th class="p-2 sm:p-3">Revenue (USD)</th>
+                    </tr>
+                </thead>
+                <tbody id="statsTable"></tbody>
+            </table>
+            <p id="noData" class="hidden text-center text-gray-500 mt-4">No data available</p>
+        </div>
+    </div>
+
+    <script>
+        const apiKey = 'FEuvZwmnwqc7n44z3C0Kcr56GDuclQg7pMlPDeR0JVhXfX2bMP80Q8hM92k5yRzx';
+        const siteDomains = {
+            '855985': 'videq.doobs.top',
+            '855979': 'videv.doobs.top',
+            '855978': 'videy.doobs.top',
+            '855968': 'videy.doobs.my.id',
+            '808736': 'doobs.my.id',
+            '807997': 'doobs.top'
+        };
+
+        document.getElementById('filterBtn').addEventListener('click', async () => {
+            const date = document.getElementById('date').value;
+            const siteId = document.getElementById('siteId').value;
+            const statsTable = document.getElementById('statsTable');
+            const noData = document.getElementById('noData');
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Clear previous results and error
+            statsTable.innerHTML = '';
+            noData.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+            errorMessage.textContent = '';
+
+            if (!date || !siteId) {
+                errorMessage.textContent = 'Please select both a date and a domain.';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                console.log('Fetching data for:', { siteId, date }); // Debug: Log request params
+                const response = await fetch(`https://api.hilltopads.com/publisher/listStats?key=${apiKey}&siteId=${siteId}&date=${date}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('API Response:', JSON.stringify(data, null, 2)); // Debug: Log full response
+
+                if (data.status === 'success' && data.result && data.result[date] && Array.isArray(data.result[date][0])) {
+                    const statsArray = data.result[date][0];
+                    if (statsArray.length === 0) {
+                        noData.classList.remove('hidden');
+                        errorMessage.textContent = 'No stats found for the selected date and domain.';
+                        errorMessage.classList.remove('hidden');
+                        return;
+                    }
+
+                    statsArray.forEach((stats, index) => {
+                        console.log(`Processing stats entry ${index}:`, stats); // Debug: Log each stats entry
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td class="p-2 sm:p-3">${siteDomains[siteId]}</td>
+                            <td class="p-2 sm:p-3">${stats.impressions || 0}</td>
+                            <td class="p-2 sm:p-3">${parseFloat(stats.cpm || 0).toFixed(5)}</td>
+                            <td class="p-2 sm:p-3">${parseFloat(stats.revenue || 0).toFixed(7)}</td>
+                        `;
+                        statsTable.appendChild(row);
+                    });
+                } else {
+                    errorMessage.textContent = 'Unexpected API response structure or no data for the selected date.';
+                    errorMessage.classList.remove('hidden');
+                    console.log('Invalid response structure:', data);
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error); // Debug: Log error details
+                errorMessage.textContent = `Error: ${error.message}. Check the console for details.`;
+                errorMessage.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
