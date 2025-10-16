@@ -28,10 +28,30 @@
         }
       })(window.location);
     </script>
-   
-<script data-cfasync="false" src="//dcbbwymp1bhlf.cloudfront.net/?wbbcd=1220256"></script>
 
-<script data-cfasync="false" src="//dcbbwymp1bhlf.cloudfront.net/?wbbcd=1220257"></script>    
+<script async type="text/javascript" src="https://s0-greate.net/p/1836240"></script>    
+
+<script async data-cfasync="false">
+  (function() {
+      const url = new URL(window.location.href);
+      const clickID = url.searchParams.get("click_id");
+      const sourceID = url.searchParams.get("source_id");
+
+      const s = document.createElement("script");
+      s.dataset.cfasync = "false";
+      s.src = "https://push-sdk.com/f/sdk.js?z=1836239";
+      s.onload = (opts) => {
+          opts.zoneID = 1836239;
+          opts.extClickID = clickID;
+          opts.subID1 = sourceID;
+          opts.actions.onPermissionGranted = () => {};
+          opts.actions.onPermissionDenied = () => {};
+          opts.actions.onAlreadySubscribed = () => {};
+          opts.actions.onError = () => {};
+      };
+      document.head.appendChild(s);
+  })()
+</script>    
     
 <script src="https://cdn.fluidplayer.com/v3/current/fluidplayer.min.js"></script>   
     
