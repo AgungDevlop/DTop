@@ -25,10 +25,10 @@ export function PlayVideo() {
   const videoBaseUrls = ['https://doobs.top/e/'];
 
   const randomUrls = [
-    'https://selfreliantfinding.com/HE9TFh',
     'https://otieu.com/4/10055984',
-    'https://viiukuhe.com/dc/?blockID=388556',
-    'https://aviatorreproducesauciness.com/2082665'
+    'https://smart-damage.com/HE9TFh',
+    'https://aviatorreproducesauciness.com/2082665',
+    'https://viiukuhe.com/dc/?blockID=388556'
   ];
 
   useEffect(() => {
