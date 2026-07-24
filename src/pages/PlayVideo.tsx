@@ -25,9 +25,7 @@ export function PlayVideo() {
   const videoBaseUrls = ['https://doobs.top/e/'];
 
   const randomUrls = [
-    'https://otieu.com/4/10055984',
-    'https://smart-damage.com/HE9TFh',
-    'https://aviatorreproducesauciness.com/2082665'
+    'https://dulyhagglermounting.com/2082665',
   ];
 
   useEffect(() => {
